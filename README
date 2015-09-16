@@ -1,8 +1,8 @@
-Nagios::Plugin
+Nagios::Monitoring::Plugin
 ==============
 
 These modules are meant for perl developers of plugins for Nagios 
-(http://nagiosplug.sourceforge.net). It is meant to simplify a lot 
+(https://github.com/nagios-plugins/nagios-plugin-perl). It is meant to simplify a lot 
 of the common functions required to do checking of a particular 
 service.
 
@@ -29,7 +29,7 @@ working example of a plugin script.
 
 COPYRIGHT AND LICENCE
 
-Copyright (C) 2006 by Nagios Plugin Development Team
+Copyright (C) 2006-2015 by Nagios Plugin Development Team
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself, either Perl version 5.8.4 or,

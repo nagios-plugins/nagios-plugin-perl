@@ -1,4 +1,4 @@
-package Nagios::Plugin::Config;
+package Nagios::Monitoring::Plugin::Config;
 
 use strict;
 use Carp;
@@ -94,15 +94,15 @@ sub np_getfile { return $CURRENT_FILE; }
 
 =head1 NAME
 
-Nagios::Plugin::Config - read nagios plugin .ini style config files
+Nagios::Monitoring::Plugin::Config - read nagios plugin .ini style config files
 
 =head1 SYNOPSIS
 
     # Read given nagios plugin config file
-    $Config = Nagios::Plugin::Config->read( '/etc/nagios/plugins.ini' );
+    $Config = Nagios::Monitoring::Plugin::Config->read( '/etc/Nagios/Monitoring/Plugins.ini' );
 
     # Search for and read default nagios plugin config file
-    $Config = Nagios::Plugin::Config->read();
+    $Config = Nagios::Monitoring::Plugin::Config->read();
 
     # Access sections and properties (returns scalars or arrayrefs)
     $rootproperty =  $Config->{_}->{rootproperty};
@@ -111,7 +111,7 @@ Nagios::Plugin::Config - read nagios plugin .ini style config files
 
 =head1 DESCRIPTION
 
-Nagios::Plugin::Config is a subclass of the excellent Config::Tiny,
+Nagios::Monitoring::Plugin::Config is a subclass of the excellent Config::Tiny,
 with the following changes:
 
 =over 4
@@ -126,16 +126,16 @@ Write functionality has been removed i.e. access is read only
 
 =item 
 
-Nagios::Plugin::Config searches for a default nagios plugins file if no explicit 
+Nagios::Monitoring::Plugin::Config searches for a default nagios plugins file if no explicit 
 filename is given to C<read()>. The current standard locations checked are:
 
 =over 4
 
-=item /etc/nagios/plugins.ini
+=item /etc/Nagios/Monitoring/Plugins.ini
 
 =item /usr/local/nagios/etc/plugins.ini
 
-=item /usr/local/etc/nagios /etc/opt/nagios/plugins.ini
+=item /usr/local/etc/nagios /etc/opt/Nagios/Monitoring/Plugins.ini
 
 =item /etc/nagios-plugins.ini 
 
@@ -154,18 +154,18 @@ C<nagios-plugins.ini> file found will be used.
 
 =head1 SEE ALSO
 
-L<Config::Tiny>, L<Nagios::Plugin>
+L<Config::Tiny>, L<Nagios::Monitoring::Plugin>
 
 
 =head1 AUTHORS
 
 This code is maintained by the Nagios Plugin Development Team: 
-L<http://nagiosplug.sourceforge.net>.
+L<https://nagios-plugins.org/>.
 
 
 =head1 COPYRIGHT and LICENCE
 
-Copyright (C) 2006-2007 by Nagios Plugin Development Team
+Copyright (C) 2006-2015 by Nagios Plugin Development Team
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.

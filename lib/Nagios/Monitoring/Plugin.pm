@@ -1,7 +1,7 @@
 
-package Nagios::Plugin;
+package Nagios::Monitoring::Plugin;
 
-use Nagios::Plugin::Functions qw(:codes %ERRORS %STATUS_TEXT @STATUS_CODES);
+use Nagios::Monitoring::Plugin::Functions qw(:codes %ERRORS %STATUS_TEXT @STATUS_CODES);
 use Params::Validate qw(:all);
 
 use strict;
@@ -10,7 +10,7 @@ use warnings;
 use Carp;
 use base qw(Class::Accessor::Fast);
 
-Nagios::Plugin->mk_accessors(qw(
+Nagios::Monitoring::Plugin->mk_accessors(qw(
 								shortname
 								perfdata 
 								messages 
@@ -25,8 +25,8 @@ our @EXPORT_OK = qw(%ERRORS %STATUS_TEXT);
 
 # CPAN stupidly won't index this module without a literal $VERSION here,
 #   so we're forced to duplicate it explicitly
-# Make sure you update $Nagios::Plugin::Functions::VERSION too
-our $VERSION = "0.36";
+# Make sure you update $Nagios::Monitoring::Plugin::Functions::VERSION too
+our $VERSION = "0.50";
 
 sub new {
 	my $class = shift;
@@ -46,7 +46,7 @@ sub new {
 		},
 	);
 
-	my $shortname = Nagios::Plugin::Functions::get_shortname(\%args);
+	my $shortname = Nagios::Monitoring::Plugin::Functions::get_shortname(\%args);
 	delete $args{shortname} if (exists $args{shortname});
 	my $self = {
 		shortname => $shortname,
@@ -61,16 +61,16 @@ sub new {
 	};
 	bless $self, $class;
 	if (exists $args{usage}) {
-		require Nagios::Plugin::Getopt;
-		$self->opts( new Nagios::Plugin::Getopt(%args) );
+		require Nagios::Monitoring::Plugin::Getopt;
+		$self->opts( new Nagios::Monitoring::Plugin::Getopt(%args) );
 	}
 	return $self;
 }
 
 sub add_perfdata {
     my ($self, %args) = @_;
-    require Nagios::Plugin::Performance;
-    my $perf = Nagios::Plugin::Performance->new(%args);
+    require Nagios::Monitoring::Plugin::Performance;
+    my $perf = Nagios::Monitoring::Plugin::Performance->new(%args);
     push @{$self->perfdata}, $perf;
 }
 sub all_perfoutput {
@@ -80,31 +80,31 @@ sub all_perfoutput {
 
 sub set_thresholds { 
     my $self = shift; 
-    require Nagios::Plugin::Threshold;
-    return $self->threshold( Nagios::Plugin::Threshold->set_thresholds(@_)); 
+    require Nagios::Monitoring::Plugin::Threshold;
+    return $self->threshold( Nagios::Monitoring::Plugin::Threshold->set_thresholds(@_)); 
 }
 
 # NP::Functions wrappers
 sub nagios_exit {
     my $self = shift;
-    Nagios::Plugin::Functions::nagios_exit(@_, { plugin => $self });
+    Nagios::Monitoring::Plugin::Functions::nagios_exit(@_, { plugin => $self });
 }
 sub nagios_die {
     my $self = shift;
-    Nagios::Plugin::Functions::nagios_die(@_, { plugin => $self });
+    Nagios::Monitoring::Plugin::Functions::nagios_die(@_, { plugin => $self });
 }
 sub die {
     my $self = shift;
-    Nagios::Plugin::Functions::nagios_die(@_, { plugin => $self });
+    Nagios::Monitoring::Plugin::Functions::nagios_die(@_, { plugin => $self });
 }
 sub max_state {
-    Nagios::Plugin::Functions::max_state(@_);
+    Nagios::Monitoring::Plugin::Functions::max_state(@_);
 }
 sub max_state_alt {
-    Nagios::Plugin::Functions::max_state_alt(@_);
+    Nagios::Monitoring::Plugin::Functions::max_state_alt(@_);
 }
 
-# top level interface to Nagios::Plugin::Threshold
+# top level interface to Nagios::Monitoring::Plugin::Threshold
 sub check_threshold {
 	my $self = shift;
 
@@ -147,7 +147,7 @@ sub check_threshold {
 	return $self->threshold->get_status($args{check});
 }
 
-# top level interface to my Nagios::Plugin::Getopt object
+# top level interface to my Nagios::Monitoring::Plugin::Getopt object
 sub add_arg {
     my $self = shift;
 	$self->opts->arg(@_) if $self->_check_for_opts;
@@ -160,8 +160,8 @@ sub getopts {
 sub _check_for_opts {
 	my $self = shift;
 	croak
-		"You have to supply a 'usage' param to Nagios::Plugin::new() if you want to use Getopts from your Nagios::Plugin object."
-			unless ref $self->opts() eq 'Nagios::Plugin::Getopt';
+		"You have to supply a 'usage' param to Nagios::Monitoring::Plugin::new() if you want to use Getopts from your Nagios::Monitoring::Plugin object."
+			unless ref $self->opts() eq 'Nagios::Monitoring::Plugin::Getopt';
 	return $self;
 }
 
@@ -209,7 +209,7 @@ sub check_messages {
         }
     }
 
-    Nagios::Plugin::Functions::check_messages(%args);
+    Nagios::Monitoring::Plugin::Functions::check_messages(%args);
 }
 
 # -------------------------------------------------------------------------
@@ -222,23 +222,23 @@ __END__
 
 =head1 NAME
 
-Nagios::Plugin - A family of perl modules to streamline writing Nagios 
+Nagios::Monitoring::Plugin - A family of perl modules to streamline writing Nagios 
 plugins
 
 =head1 SYNOPSIS
 
    # Constants OK, WARNING, CRITICAL, and UNKNOWN are exported by default
-   # See also Nagios::Plugin::Functions for a functional interface
-   use Nagios::Plugin;
+   # See also Nagios::Monitoring::Plugin::Functions for a functional interface
+   use Nagios::Monitoring::Plugin;
 
    # Constructor
-   $np = Nagios::Plugin->new;                               # OR
-   $np = Nagios::Plugin->new( shortname => "PAGESIZE" );    # OR
+   $np = Nagios::Monitoring::Plugin->new;                               # OR
+   $np = Nagios::Monitoring::Plugin->new( shortname => "PAGESIZE" );    # OR
 
 
-   # use Nagios::Plugin::Getopt to process the @ARGV command line options:
+   # use Nagios::Monitoring::Plugin::Getopt to process the @ARGV command line options:
    #   --verbose, --help, --usage, --timeout and --host are defined automatically.
-   $np = Nagios::Plugin->new(  
+   $np = Nagios::Monitoring::Plugin->new(  
      usage => "Usage: %s [ -v|--verbose ]  [-H <host>] [-t <timeout>] "
        . "[ -c|--critical=<threshold> ] [ -w|--warning=<threshold> ]",
    );
@@ -247,7 +247,7 @@ plugins
    $np->add_arg(
      spec => 'warning|w=s',
      help => '-w, --warning=INTEGER:INTEGER .  See '
-       . 'http://nagiosplug.sourceforge.net/developer-guidelines.html#THRESHOLDFORMAT '
+       . 'https://nagios-plugins.org/doc/guidelines.html#THRESHOLDFORMAT '
        . 'for the threshold format. ',
    );
 
@@ -312,16 +312,16 @@ plugins
 
 =head1 DESCRIPTION
 
-Nagios::Plugin and its associated Nagios::Plugin::* modules are a
+Nagios::Monitoring::Plugin and its associated Nagios::Monitoring::Plugin::* modules are a
 family of perl modules to streamline writing Nagios plugins. The main
-end user modules are Nagios::Plugin, providing an object-oriented
-interface to the entire Nagios::Plugin::* collection, and
-Nagios::Plugin::Functions, providing a simpler functional interface to
+end user modules are Nagios::Monitoring::Plugin, providing an object-oriented
+interface to the entire Nagios::Monitoring::Plugin::* collection, and
+Nagios::Monitoring::Plugin::Functions, providing a simpler functional interface to
 a useful subset of the available functionality.
 
 The purpose of the collection is to make it as simple as possible for
 developers to create plugins that conform the Nagios Plugin guidelines
-(http://nagiosplug.sourceforge.net/developer-guidelines.html).
+(https://nagios-plugins.org/doc/guidelines.html).
 
 
 =head2 EXPORTS
@@ -354,11 +354,11 @@ reverse of %ERRORS.
 
 =head2 CONSTRUCTOR
 
-	Nagios::Plugin->new;
+	Nagios::Monitoring::Plugin->new;
 
-	Nagios::Plugin->new( shortname => 'PAGESIZE' );
+	Nagios::Monitoring::Plugin->new( shortname => 'PAGESIZE' );
 
-	Nagios::Plugin->new(
+	Nagios::Monitoring::Plugin->new(
 		usage => "Usage: %s [ -v|--verbose ]  [-H <host>] [-t <timeout>]
 	             [ -c|--critical=<critical threshold> ] [ -w|--warning=<warning threshold> ]  ",
 		version => $VERSION,
@@ -370,7 +370,7 @@ reverse of %ERRORS.
 		timeout => 15,
 	);
 
-Instantiates a new Nagios::Plugin object. Accepts the following named
+Instantiates a new Nagios::Monitoring::Plugin object. Accepts the following named
 arguments:
 
 =over 4
@@ -382,10 +382,10 @@ output by the various exit methods. Default: uc basename $0.
 
 =item usage ("Usage:  %s --foo --bar")
 
-Passing a value for the usage() argument makes Nagios::Plugin
-instantiate its own C<Nagios::Plugin::Getopt> object so you can start
+Passing a value for the usage() argument makes Nagios::Monitoring::Plugin
+instantiate its own C<Nagios::Monitoring::Plugin::Getopt> object so you can start
 doing command line argument processing.  See
-L<Nagios::Plugin::Getopt/CONSTRUCTOR> for more about "usage" and the
+L<Nagios::Monitoring::Plugin::Getopt/CONSTRUCTOR> for more about "usage" and the
 following options:
 
 =item version
@@ -406,7 +406,7 @@ following options:
 
 =head2 OPTION HANDLING METHODS
 
-C<Nagios::Plugin> provides these methods for accessing the functionality in C<Nagios::Plugin::Getopt>.
+C<Nagios::Monitoring::Plugin> provides these methods for accessing the functionality in C<Nagios::Monitoring::Plugin::Getopt>.
 
 =over 4
 
@@ -425,19 +425,19 @@ Examples:
   #   Parameter order is 'spec', 'help', 'default', 'required?'
   $plugin->add_arg('hello=s', "--hello\n   Hello string", undef, 1);
 
-See L<Nagios::Plugin::Getopt/ARGUMENTS> for more details.
+See L<Nagios::Monitoring::Plugin::Getopt/ARGUMENTS> for more details.
 
 =item getopts()
 
 Parses and processes the command line options you've defined,
 automatically doing the right thing with help/usage/version arguments.
 
-See  L<Nagios::Plugin::Getopt/GETOPTS> for more details.
+See  L<Nagios::Monitoring::Plugin::Getopt/GETOPTS> for more details.
 
 =item opts()
 
 Assuming you've instantiated it by passing 'usage' to new(), opts()
-returns the Nagios::Plugin object's C<Nagios::Plugin::Getopt> object,
+returns the Nagios::Monitoring::Plugin object's C<Nagios::Monitoring::Plugin::Getopt> object,
 with which you can do lots of great things.
 
 E.g.
@@ -456,7 +456,7 @@ E.g.
   #   $plugin->getopts;
   print $plugin->opts->my_argument;
 
-Again, see L<Nagios::Plugin::Getopt>.
+Again, see L<Nagios::Monitoring::Plugin::Getopt>.
 
 =back
 
@@ -481,16 +481,16 @@ Alias for nagios_die(). Deprecated.
 
 =item max_state, max_state_alt
 
-These are wrapper function for Nagios::Plugin::Functions::max_state and
-Nagios::Plugin::Functions::max_state_alt.
+These are wrapper function for Nagios::Monitoring::Plugin::Functions::max_state and
+Nagios::Monitoring::Plugin::Functions::max_state_alt.
 
 =back
 
 =head2 THRESHOLD METHODS
 
 These provide a top level interface to the
-C<Nagios::Plugin::Threshold> module; for more details, see
-L<Nagios::Plugin::Threshold> and L<Nagios::Plugin::Range>.
+C<Nagios::Monitoring::Plugin::Threshold> module; for more details, see
+L<Nagios::Monitoring::Plugin::Threshold> and L<Nagios::Monitoring::Plugin::Range>.
 
 =over 4
 
@@ -523,13 +523,13 @@ The return value is ready to pass to C <nagios_exit>, e . g .,
 =item set_thresholds(warning => "10:25", critical => "~:25")
 
 Sets the acceptable ranges and creates the plugin's
-Nagios::Plugins::Threshold object.  See
-http://nagiosplug.sourceforge.net/developer-guidelines.html#THRESHOLDFORMAT
+Nagios::Monitoring::Plugins::Threshold object.  See
+https://nagios-plugins.org/doc/guidelines.html#THRESHOLDFORMAT
 for details and examples of the threshold format.
 
 =item threshold()
 
-Returns the object's C<Nagios::Plugin::Threshold> object, if it has
+Returns the object's C<Nagios::Monitoring::Plugin::Threshold> object, if it has
 been defined by calling set_thresholds().  You can pass a new
 Threshold object to it to replace the old one too, but you shouldn't
 need to do that from a plugin script.
@@ -635,10 +635,10 @@ Add a set of performance data to the object. May be called multiple times.
 The performance data is included in the standard plugin output messages by
 the various exit methods.
 
-See the Nagios::Plugin::Performance documentation for more information on
+See the Nagios::Monitoring::Plugin::Performance documentation for more information on
 performance data and the various field definitions, as well as the relevant
 section of the Nagios Plugin guidelines
-(http://nagiosplug.sourceforge.net/developer-guidelines.html#AEN202).
+(https://nagios-plugins.org/doc/guidelines.html#AEN202).
 
 =back
 
@@ -648,28 +648,28 @@ section of the Nagios Plugin guidelines
 "Enough talk!  Show me some examples!"
 
 See the file 'check_stuff.pl' in the 't' directory included with the
-Nagios::Plugin distribution for a complete working example of a plugin
+Nagios::Monitoring::Plugin distribution for a complete working example of a plugin
 script.
 
 
 =head1 VERSIONING
 
-The Nagios::Plugin::* modules are currently experimental and so the
-interfaces may change up until Nagios::Plugin hits version 1.0, although
+The Nagios::Monitoring::Plugin::* modules are currently experimental and so the
+interfaces may change up until Nagios::Monitoring::Plugin hits version 1.0, although
 every attempt will be made to keep them as backwards compatible as
 possible.
 
 
 =head1 SEE ALSO
 
-See L<Nagios::Plugin::Functions> for a simple functional interface to a subset
-of the available Nagios::Plugin functionality.
+See L<Nagios::Monitoring::Plugin::Functions> for a simple functional interface to a subset
+of the available Nagios::Monitoring::Plugin functionality.
 
-See also L<Nagios::Plugin::Getopt>, L<Nagios::Plugin::Range>,
-L<Nagios::Plugin::Performance>, L<Nagios::Plugin::Range>, and
-L<Nagios::Plugin::Threshold>.
+See also L<Nagios::Monitoring::Plugin::Getopt>, L<Nagios::Monitoring::Plugin::Range>,
+L<Nagios::Monitoring::Plugin::Performance>, L<Nagios::Monitoring::Plugin::Range>, and
+L<Nagios::Monitoring::Plugin::Threshold>.
 
-The Nagios Plugin project page is at http://nagiosplug.sourceforge.net.
+The Nagios Plugin project page is at https://nagios-plugins.org.
 
 
 =head1 BUGS
@@ -681,13 +681,13 @@ nagiosplug-devel@lists.sourceforge.net.
 =head1 AUTHOR
 
 Maintained by the Nagios Plugin development team -
-http://nagiosplug.sourceforge.net.
+https://nagios-plugins.org.
 
 Originally by Ton Voon, E<lt>ton.voon@altinity.comE<gt>.
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2006 by Nagios Plugin Development Team
+Copyright (C) 2006-2015 by Nagios Plugin Development Team
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself, either Perl version 5.8.4 or, at your

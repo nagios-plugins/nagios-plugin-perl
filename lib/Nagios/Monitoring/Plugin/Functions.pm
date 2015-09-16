@@ -1,7 +1,7 @@
-# Functional interface to basic Nagios::Plugin constants, exports, 
+# Functional interface to basic Nagios::Monitoring::Plugin constants, exports, 
 # and functions
 
-package Nagios::Plugin::Functions;
+package Nagios::Monitoring::Plugin::Functions;
 
 use 5.006;
 
@@ -11,8 +11,8 @@ use File::Basename;
 use Params::Validate qw(:types validate);
 use Math::Calc::Units;
 
-# Remember to update Nagios::Plugins as well
-our $VERSION = "0.36";
+# Remember to update Nagios::Monitoring::Plugins as well
+our $VERSION = "0.50";
 
 our @STATUS_CODES = qw(OK WARNING CRITICAL UNKNOWN DEPENDENT);
 
@@ -131,8 +131,8 @@ sub nagios_exit {
 
     # Don't actually exit if _fake_exit set
     if ($_fake_exit) {
-        require Nagios::Plugin::ExitResult;
-        return Nagios::Plugin::ExitResult->new($code, $output);
+        require Nagios::Monitoring::Plugin::ExitResult;
+        return Nagios::Monitoring::Plugin::ExitResult->new($code, $output);
     }
 
     _nagios_exit($code, $output);
@@ -252,13 +252,13 @@ __END__
 
 =head1 NAME
 
-Nagios::Plugin::Functions - functions to simplify the creation of 
+Nagios::Monitoring::Plugin::Functions - functions to simplify the creation of 
 Nagios plugins
 
 =head1 SYNOPSIS
 
     # Constants OK, WARNING, CRITICAL, and UNKNOWN exported by default
-    use Nagios::Plugin::Functions;
+    use Nagios::Monitoring::Plugin::Functions;
 
     # nagios_exit( CODE, $message ) - exit with error code CODE,
     # and message "PLUGIN CODE - $message"
@@ -287,12 +287,12 @@ Nagios plugins
 
 =head1 DESCRIPTION
 
-This module is part of the Nagios::Plugin family, a set of modules
+This module is part of the Nagios::Monitoring::Plugin family, a set of modules
 for simplifying the creation of Nagios plugins. This module exports
 convenience functions for the class methods provided by 
-Nagios::Plugin. It is intended for those who prefer a simpler 
+Nagios::Monitoring::Plugin. It is intended for those who prefer a simpler 
 functional interface, and who do not need the additional 
-functionality of Nagios::Plugin.
+functionality of Nagios::Monitoring::Plugin.
 
 =head2 EXPORTS
 
@@ -427,18 +427,18 @@ internal tests performed can return UNKNOWN.
 
 =head1 SEE ALSO
 
-Nagios::Plugin; the nagios plugin developer guidelines at
-http://nagiosplug.sourceforge.net/developer-guidelines.html.
+Nagios::Monitoring::Plugin; the nagios plugin developer guidelines at
+https://nagios-plugins.org/doc/guidelines.html.
 
 
 =head1 AUTHORS
 
-This code is maintained by the Nagios Plugin Development Team: http://nagiosplug.sourceforge.net
+This code is maintained by the Nagios Plugin Development Team: https://nagios-plugins.org/
 
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2006 by Nagios Plugin Development Team
+Copyright (C) 2006-2015 by Nagios Plugin Development Team
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.

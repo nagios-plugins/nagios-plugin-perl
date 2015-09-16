@@ -2,31 +2,31 @@
 use strict;
 use Test::More tests => 93;
 BEGIN { 
-  use_ok('Nagios::Plugin::Threshold'); 
-  use_ok('Nagios::Plugin::Functions', ':all' );
+  use_ok('Nagios::Monitoring::Plugin::Threshold'); 
+  use_ok('Nagios::Monitoring::Plugin::Functions', ':all' );
   # Silence warnings unless TEST_VERBOSE is set
   $SIG{__WARN__} = sub { warn $_[0] if $ENV{TEST_VERBOSE} };
 }
 
-diag "\nusing Nagios::Plugin::Threshold revision ". $Nagios::Plugin::Threshold::VERSION . "\n"
+diag "\nusing Nagios::Monitoring::Plugin::Threshold revision ". $Nagios::Monitoring::Plugin::Threshold::VERSION . "\n"
   if $ENV{TEST_VERBOSE};
 
-Nagios::Plugin::Functions::_fake_exit(1);
+Nagios::Monitoring::Plugin::Functions::_fake_exit(1);
 
 my $t;
 
-$t = Nagios::Plugin::Threshold->set_thresholds(warning => undef, critical => undef);
+$t = Nagios::Monitoring::Plugin::Threshold->set_thresholds(warning => undef, critical => undef);
 ok( defined $t, "two undefs" );
 ok( ! $t->warning->is_set, "warning not set" );
 ok( ! $t->critical->is_set, "critical not set" );
 
-$t = Nagios::Plugin::Threshold->set_thresholds(warning => "", critical => "");
+$t = Nagios::Monitoring::Plugin::Threshold->set_thresholds(warning => "", critical => "");
 ok( defined $t, "two empty strings" );
 ok( ! $t->warning->is_set, "warning not set" );
 ok( ! $t->critical->is_set, "critical not set" );
 
 diag "threshold: critical if > 80" if $ENV{TEST_VERBOSE};
-my $t = Nagios::Plugin::Threshold->set_thresholds(critical => "80");
+my $t = Nagios::Monitoring::Plugin::Threshold->set_thresholds(critical => "80");
 ok( defined $t, "Threshold ('', '80') set");
 ok( ! $t->warning->is_set, "Warning not set");
 cmp_ok( $t->critical->start, '==', 0, "Critical strat set correctly");
@@ -63,7 +63,7 @@ test_expected_statuses( $t, $expected );
 # state is undefined (and untestable!), or we should be returning a non-fatal error
 if (0) {
   diag "threshold: warn if less than 5 or more than 33." if $ENV{TEST_VERBOSE};
-  eval { $t = Nagios::Plugin::Threshold->set_thresholds(warning => "5:33", critical => "") };
+  eval { $t = Nagios::Monitoring::Plugin::Threshold->set_thresholds(warning => "5:33", critical => "") };
   ok( defined $t, "Threshold ('5:33', '') set");
   cmp_ok( $t->warning->start, '==', 5, "Warning start set");
   cmp_ok( $t->warning->end, '==',   33, "Warning end set");
@@ -72,7 +72,7 @@ if (0) {
 
 # GC: same as previous test, except critical is undef instead of ''
 diag "threshold: warn if less than 5 or more than 33." if $ENV{TEST_VERBOSE};
-$t = Nagios::Plugin::Threshold->set_thresholds(warning => "5:33", critical => undef);
+$t = Nagios::Monitoring::Plugin::Threshold->set_thresholds(warning => "5:33", critical => undef);
 ok( defined $t, "Threshold ('5:33', '') set");
 cmp_ok( $t->warning->start, '==', 5, "Warning start set");
 cmp_ok( $t->warning->end, '==',   33, "Warning end set");
@@ -91,7 +91,7 @@ $expected = { qw(
 test_expected_statuses( $t, $expected );
 
 diag "threshold: warn if more than 30; critical if > 60" if $ENV{TEST_VERBOSE};
-$t = Nagios::Plugin::Threshold->set_thresholds(warning => "~:30", critical => "~:60");
+$t = Nagios::Monitoring::Plugin::Threshold->set_thresholds(warning => "~:30", critical => "~:60");
 ok( defined $t, "Threshold ('~:30', '~:60') set");
 cmp_ok( $t->warning->end, '==', 30, "Warning end set");
 cmp_ok( $t->critical->end, '==',60, "Critical end set");
@@ -118,23 +118,23 @@ test_expected_statuses( $t, $expected );
 goto SKIP_DEATH;
 diag "threshold: test pure crap for arguments - default to OK." if $ENV{TEST_VERBOSE};
 diag "you should see one invalid range definition warning and an UNKNOWN line here:\n";
-Nagios::Plugin::Functions->print_on_die(1);
-Nagios::Plugin::Functions->exit_on_die(1);
+Nagios::Monitoring::Plugin::Functions->print_on_die(1);
+Nagios::Monitoring::Plugin::Functions->exit_on_die(1);
 
 dies_ok( sub {
-	$t = Nagios::Plugin::Threshold->set_thresholds(
+	$t = Nagios::Monitoring::Plugin::Threshold->set_thresholds(
 												   warning => "total", 
 												   critical => "rubbish"
 												   )
 	}, "bad thresholds cause death" 
 );
-Nagios::Plugin::Functions->print_on_die(0);
-Nagios::Plugin::Functions->exit_on_die(0);
+Nagios::Monitoring::Plugin::Functions->print_on_die(0);
+Nagios::Monitoring::Plugin::Functions->exit_on_die(0);
 SKIP_DEATH:
 
 
 diag "threshold: critical if > 25 " if $ENV{TEST_VERBOSE};
-$t = Nagios::Plugin::Threshold->set_thresholds( critical => "~:25" );
+$t = Nagios::Monitoring::Plugin::Threshold->set_thresholds( critical => "~:25" );
 ok( defined $t, "Threshold ('', '~:25') set (".$t->critical.")" );
 ok( ! $t->warning->is_set, "Warning not set");
 cmp_ok( $t->critical->end, '==',25, "Critical end set");
@@ -152,7 +152,7 @@ $expected = { qw(
 test_expected_statuses( $t, $expected);
 
 diag "threshold: warn if OUTSIDE {10..25} , critical if > 25 " if $ENV{TEST_VERBOSE};
-$t = Nagios::Plugin::Threshold->set_thresholds(warning => "10:25", critical => "~:25");
+$t = Nagios::Monitoring::Plugin::Threshold->set_thresholds(warning => "10:25", critical => "~:25");
 ok( defined $t, "Threshold ('10:25', '~:25') set");
 cmp_ok( $t->warning->start, '==', 10, "Warning start set");
 cmp_ok( $t->warning->end, '==',   25, "Warning end set");
@@ -172,7 +172,7 @@ test_expected_statuses( $t, $expected );
 
 
 diag "warn if INSIDE {10..25} , critical if < 10 "  if $ENV{TEST_VERBOSE};
-$t = Nagios::Plugin::Threshold->set_thresholds(warning => "\@10:25", critical => "10:");
+$t = Nagios::Monitoring::Plugin::Threshold->set_thresholds(warning => "\@10:25", critical => "10:");
 $expected = { qw(
     -1              CRITICAL
     4               CRITICAL
@@ -200,16 +200,16 @@ is( $t->critical->end,  90, "Critical end ok");
 
 
 # Also as of 0.16, accepts N::P::Range objects as arguments
-my $warning  = Nagios::Plugin::Range->parse_range_string("50");
-my $critical = Nagios::Plugin::Range->parse_range_string("70:90");
-$t = Nagios::Plugin::Threshold->set_thresholds(warning => $warning, critical => $critical);
+my $warning  = Nagios::Monitoring::Plugin::Range->parse_range_string("50");
+my $critical = Nagios::Monitoring::Plugin::Range->parse_range_string("70:90");
+$t = Nagios::Monitoring::Plugin::Threshold->set_thresholds(warning => $warning, critical => $critical);
 ok( defined $t, "Threshold from ranges ('50', '70:90') set");
 is( $t->warning->start,   0, "Warning start ok");
 is( $t->warning->end,    50, "Warning end ok");
 is( $t->critical->start, 70, "Critical start ok");
 is( $t->critical->end,   90, "Critical end ok");
 
-$critical = Nagios::Plugin::Range->parse_range_string("90:");
+$critical = Nagios::Monitoring::Plugin::Range->parse_range_string("90:");
 $t->set_thresholds(warning => "~:20", critical => $critical);
 ok( defined $t, "Threshold from string + range ('~:20', '90:') set");
 ok( $t->warning->start_infinity, "Warning start ok (infinity)");

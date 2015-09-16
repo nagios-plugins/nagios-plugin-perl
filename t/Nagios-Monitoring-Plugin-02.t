@@ -1,14 +1,14 @@
-# Nagios::Plugin test set 2, testing NP::Functions wrapping
+# Nagios::Monitoring::Plugin test set 2, testing NP::Functions wrapping
 
 use strict;
 use Test::More tests => 103;
 
-BEGIN { use_ok("Nagios::Plugin") }
-require Nagios::Plugin::Functions;
-Nagios::Plugin::Functions::_fake_exit(1);
+BEGIN { use_ok("Nagios::Monitoring::Plugin") }
+require Nagios::Monitoring::Plugin::Functions;
+Nagios::Monitoring::Plugin::Functions::_fake_exit(1);
 
 # Hardcoded checks of constants
-my %ERRORS = %Nagios::Plugin::Functions::ERRORS;
+my %ERRORS = %Nagios::Monitoring::Plugin::Functions::ERRORS;
 is(OK,          $ERRORS{OK},            "OK        => $ERRORS{OK}");
 is(WARNING,     $ERRORS{WARNING},       "WARNING   => $ERRORS{WARNING}");
 is(CRITICAL,    $ERRORS{CRITICAL},      "CRITICAL  => $ERRORS{CRITICAL}");
@@ -16,7 +16,7 @@ is(UNKNOWN,     $ERRORS{UNKNOWN},       "UNKNOWN   => $ERRORS{UNKNOWN}");
 is(DEPENDENT,   $ERRORS{DEPENDENT},     "DEPENDENT => $ERRORS{DEPENDENT}");
 
 my $plugin = 'TEST_PLUGIN';
-my $np = Nagios::Plugin->new( shortname => $plugin );
+my $np = Nagios::Monitoring::Plugin->new( shortname => $plugin );
 is($np->shortname, $plugin, "shortname() is $plugin"); 
 
 # Test nagios_exit( CONSTANT, $msg ), nagios_exit( $string, $msg )
@@ -151,7 +151,7 @@ for (@ok) {
 # shortname testing
 SKIP: {
     skip "requires File::Basename", 2 unless eval { require File::Basename };
-    $np = Nagios::Plugin->new( version => "1");
+    $np = Nagios::Monitoring::Plugin->new( version => "1");
     $plugin = uc File::Basename::basename($0);
     $plugin =~ s/\..*$//;
     is($np->shortname, $plugin, "shortname() is '$plugin'");

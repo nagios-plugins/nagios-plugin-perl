@@ -2,7 +2,7 @@
 
 ###  check_stuff.pl
 
-# an example Nagios plugin using the Nagios::Plugin modules.  
+# an example Nagios plugin using the Nagios::Monitoring::Plugin modules.  
 
 # Originally by Nathan Vonnahme, n8v at users dot sourceforge
 # dot net, July 19 2006
@@ -16,7 +16,7 @@
 use strict;
 use warnings;
 
-use Nagios::Plugin ;
+use Nagios::Monitoring::Plugin ;
 
 use vars qw($VERSION $PROGNAME  $verbose $warn $critical $timeout $result);
 $VERSION = '1.0';
@@ -29,17 +29,17 @@ $PROGNAME = basename($0);
 ##############################################################################
 # define and get the command line options.
 #   see the command line option guidelines at 
-#   http://nagiosplug.sourceforge.net/developer-guidelines.html#PLUGOPTIONS
+#   https://nagios-plugins.org/doc/guidelines.html#PLUGOPTIONS
 
 
-# Instantiate Nagios::Plugin object (the 'usage' parameter is mandatory)
-my $p = Nagios::Plugin->new(
+# Instantiate Nagios::Monitoring::Plugin object (the 'usage' parameter is mandatory)
+my $p = Nagios::Monitoring::Plugin->new(
     usage => "Usage: %s [ -v|--verbose ]  [-H <host>] [-t <timeout>]
     [ -c|--critical=<critical threshold> ] 
     [ -w|--warning=<warning threshold> ]  
     [ -r|--result = <INTEGER> ]",
     version => $VERSION,
-    blurb => 'This plugin is an example of a Nagios plugin written in Perl using the Nagios::Plugin modules.  It will generate a random integer between 1 and 20 (though you can specify the number with the -n option for testing), and will output OK, WARNING or CRITICAL if the resulting number is outside the specified thresholds.', 
+    blurb => 'This plugin is an example of a Nagios plugin written in Perl using the Nagios::Monitoring::Plugin modules.  It will generate a random integer between 1 and 20 (though you can specify the number with the -n option for testing), and will output OK, WARNING or CRITICAL if the resulting number is outside the specified thresholds.', 
 
 	extra => "
 

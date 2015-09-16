@@ -4,12 +4,12 @@ use strict;
 use Test::More tests => 151;
 
 BEGIN { 
-  use_ok('Nagios::Plugin::Range');
+  use_ok('Nagios::Monitoring::Plugin::Range');
   # Silence warnings unless TEST_VERBOSE is set
   $SIG{__WARN__} = sub { warn $_[0] if $ENV{TEST_VERBOSE} };
 };
 
-diag "\nusing Nagios::Plugin::Range revision ". $Nagios::Plugin::Range::VERSION . "\n" if $ENV{TEST_VERBOSE};
+diag "\nusing Nagios::Monitoring::Plugin::Range revision ". $Nagios::Monitoring::Plugin::Range::VERSION . "\n" if $ENV{TEST_VERBOSE};
 
 my $r;
 
@@ -25,14 +25,14 @@ foreach (qw(
 
 ),  '1,10'  # avoid warning about using , inside qw()
 ) {
-    $r =Nagios::Plugin::Range->parse_range_string($_);
+    $r =Nagios::Monitoring::Plugin::Range->parse_range_string($_);
     is $r, undef, "'$_' should not be a valid range" ;
 }
 
 
 diag "range: 0..6 inclusive" if $ENV{TEST_VERBOSE};
-$r = Nagios::Plugin::Range->parse_range_string("6");
-isa_ok( $r, "Nagios::Plugin::Range");
+$r = Nagios::Monitoring::Plugin::Range->parse_range_string("6");
+isa_ok( $r, "Nagios::Monitoring::Plugin::Range");
 ok( defined $r, "'6' is valid range");
 cmp_ok( $r->start, '==', 0, "Start correct");
 cmp_ok( $r->start_infinity, '==', 0, "Not using negative infinity");
@@ -61,7 +61,7 @@ sub test_expected {
 test_expected( $r, $expected );
 
 diag "range :  -7..23, inclusive" if $ENV{TEST_VERBOSE};
-$r = Nagios::Plugin::Range->parse_range_string("-7:23");
+$r = Nagios::Monitoring::Plugin::Range->parse_range_string("-7:23");
 ok( defined $r, "'-7:23' is valid range");
 cmp_ok( $r->start,          '==', -7, "Start correct");
 cmp_ok( $r->start_infinity, '==', 0, "Not using negative infinity");
@@ -83,7 +83,7 @@ test_expected( $r, $expected );
 
 
 diag "range : 0..5.75, inclusive" if $ENV{TEST_VERBOSE};
-$r = Nagios::Plugin::Range->parse_range_string(":5.75");
+$r = Nagios::Monitoring::Plugin::Range->parse_range_string(":5.75");
 ok( defined $r, "':5.75' is valid range");
 cmp_ok( $r->start,          '==', 0, "Start correct");
 cmp_ok( $r->start_infinity, '==', 0, "Not using negative infinity");
@@ -105,7 +105,7 @@ test_expected( $r, $expected );
 
 
 diag "range : negative infinity .. -95.99, inclusive" if $ENV{TEST_VERBOSE};
-$r = Nagios::Plugin::Range->parse_range_string("~:-95.99");
+$r = Nagios::Monitoring::Plugin::Range->parse_range_string("~:-95.99");
 ok( defined $r, "'~:-95.99' is valid range");
 cmp_ok( $r->start_infinity, '==', 1, "Using negative infinity");
 cmp_ok( $r->end,            '==', -95.99, "End correct");
@@ -126,7 +126,7 @@ test_expected( $r, $expected );
 
 diag "range 10..infinity , inclusive" if $ENV{TEST_VERBOSE};
 test_expected( $r, $expected );
-$r = Nagios::Plugin::Range->parse_range_string("10:");
+$r = Nagios::Monitoring::Plugin::Range->parse_range_string("10:");
 ok( defined $r, "'10:' is valid range");
 cmp_ok( $r->start,          '==', 10, "Start correct");
 cmp_ok( $r->start_infinity, '==', 0, "Not using negative infinity");
@@ -147,7 +147,7 @@ test_expected( $r, $expected );
 
 diag "range 123456789012345..infinity , inclusive" if $ENV{TEST_VERBOSE};
 test_expected( $r, $expected );
-$r = Nagios::Plugin::Range->parse_range_string("123456789012345:");
+$r = Nagios::Monitoring::Plugin::Range->parse_range_string("123456789012345:");
 ok( defined $r, "'123456789012345:' is valid range");
 cmp_ok( $r->start,          '==', 123456789012345, "Start correct");
 cmp_ok( $r->start_infinity, '==', 0, "Not using negative infinity");
@@ -170,7 +170,7 @@ test_expected( $r, $expected );
 
 
 diag "range:  <= zero " if $ENV{TEST_VERBOSE};
-$r = Nagios::Plugin::Range->parse_range_string("~:0");
+$r = Nagios::Monitoring::Plugin::Range->parse_range_string("~:0");
 ok( defined $r, "'~:0' is valid range");
 cmp_ok( $r->start_infinity, '==', 1, "Using negative infinity");
 cmp_ok( $r->end,            '==', 0, "End correct");
@@ -191,7 +191,7 @@ test_expected( $r, $expected );
 
 
 diag "range: OUTSIDE 0..657.8210567" if $ENV{TEST_VERBOSE};
-$r = Nagios::Plugin::Range->parse_range_string('@0:657.8210567');
+$r = Nagios::Monitoring::Plugin::Range->parse_range_string('@0:657.8210567');
 ok( defined $r, '"@0:657.8210567" is a valid range');
 cmp_ok( $r->start,          '==', 0, "Start correct");
 cmp_ok( $r->start_infinity, '==', 0, "Not using negative infinity");
@@ -216,7 +216,7 @@ test_expected( $r, $expected );
 
 
 diag "range: 1..1 inclusive (equals one)" if $ENV{TEST_VERBOSE};
-$r = Nagios::Plugin::Range->parse_range_string('1:1');
+$r = Nagios::Monitoring::Plugin::Range->parse_range_string('1:1');
 ok( defined $r, '"1:1" is a valid range');
 cmp_ok( $r->start,          '==', 1, "Start correct");
 cmp_ok( $r->start_infinity, '==', 0, "Not using negative infinity");
@@ -237,7 +237,7 @@ $expected = {
 test_expected( $r, $expected );
 
 
-$r = Nagios::Plugin::Range->parse_range_string('2:1');
+$r = Nagios::Monitoring::Plugin::Range->parse_range_string('2:1');
 ok( ! defined $r, '"2:1" is rejected');
 
 # TODO: Need more tests for invalid data

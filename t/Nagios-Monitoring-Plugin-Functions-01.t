@@ -2,12 +2,12 @@
 use strict;
 use Test::More tests => 113;
 
-BEGIN { use_ok("Nagios::Plugin::Functions", ":all"); }
-Nagios::Plugin::Functions::_fake_exit(1);
+BEGIN { use_ok("Nagios::Monitoring::Plugin::Functions", ":all"); }
+Nagios::Monitoring::Plugin::Functions::_fake_exit(1);
 
-my $this_version=$Nagios::Plugin::Functions::VERSION;
+my $this_version=$Nagios::Monitoring::Plugin::Functions::VERSION;
 foreach my $m ("", qw(::Threshold ::Getopt ::Performance ::Range)) {
-	my $mod = "Nagios::Plugin$m";
+	my $mod = "Nagios::Monitoring::Plugin$m";
 	use_ok($mod);
 	# Lots of hackery below. Easier to say $mod->VERSION, but this is probably a recent perl thing
 	my $v = "$mod"."::VERSION";
@@ -16,7 +16,7 @@ foreach my $m ("", qw(::Threshold ::Getopt ::Performance ::Range)) {
 }
 
 # check get_shortname
-is(get_shortname, "NAGIOS-PLUGIN-FUNCTIONS-01", "get_shortname ok");
+is(get_shortname, "NAGIOS-MONITORING-PLUGIN-FUNCTIONS-01", "get_shortname ok");
 
 # Hardcoded checks of constants
 ok(defined %ERRORS, '%ERRORS defined');
@@ -155,7 +155,7 @@ for (@ok) {
 }
 
 # Check that _use_die set to 1 will catch exceptions correctly
-Nagios::Plugin::Functions::_fake_exit(0);
-Nagios::Plugin::Functions::_use_die(1);
+Nagios::Monitoring::Plugin::Functions::_fake_exit(0);
+Nagios::Monitoring::Plugin::Functions::_use_die(1);
 eval { nagios_die("Using die") };
-is( $@, "NAGIOS-PLUGIN-FUNCTIONS-01 UNKNOWN - Using die\n", "Caught exception");
+is( $@, "NAGIOS-MONITORING-PLUGIN-FUNCTIONS-01 UNKNOWN - Using die\n", "Caught exception");

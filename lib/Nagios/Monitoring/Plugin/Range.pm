@@ -1,4 +1,4 @@
-package Nagios::Plugin::Range;
+package Nagios::Monitoring::Plugin::Range;
 
 use 5.006;
 
@@ -11,8 +11,8 @@ __PACKAGE__->mk_accessors(
     qw(start end start_infinity end_infinity alert_on)
 );
 
-use Nagios::Plugin::Functions qw(:DEFAULT $value_re);
-our ($VERSION) = $Nagios::Plugin::Functions::VERSION;
+use Nagios::Monitoring::Plugin::Functions qw(:DEFAULT $value_re);
+our ($VERSION) = $Nagios::Monitoring::Plugin::Functions::VERSION;
 
 use overload
         'eq' => sub { shift->_stringify },
@@ -129,18 +129,18 @@ __END__
 
 =head1 NAME
 
-Nagios::Plugin::Range - class for handling Nagios::Plugin range data.
+Nagios::Monitoring::Plugin::Range - class for handling Nagios::Monitoring::Plugin range data.
 
 =head1 SYNOPSIS
 
-    # NB: This is an internal Nagios::Plugin class. 
-    # See Nagios::Plugin itself for public interfaces.
+    # NB: This is an internal Nagios::Monitoring::Plugin class. 
+    # See Nagios::Monitoring::Plugin itself for public interfaces.
 
     # Instantiate an empty range object
-    $r = Nagios::Plugin::Range->new; 
+    $r = Nagios::Monitoring::Plugin::Range->new; 
 
     # Instantiate by parsing a standard nagios range string
-    $r = Nagios::Plugin::Range->parse_range_string( $range_str );
+    $r = Nagios::Monitoring::Plugin::Range->parse_range_string( $range_str );
 
     # Returns true if the range is defined/non-empty
     $r->is_set;
@@ -151,17 +151,17 @@ Nagios::Plugin::Range - class for handling Nagios::Plugin range data.
 
 =head1 DESCRIPTION
 
-Internal Nagios::Plugin class for handling common range data. See 
-Nagios::Plugin for public interfaces.
+Internal Nagios::Monitoring::Plugin class for handling common range data. See 
+Nagios::Monitoring::Plugin for public interfaces.
 
 =head1 AUTHOR
 
 This code is maintained by the Nagios Plugin Development Team: see
-http://nagiosplug.sourceforge.net.
+https://nagios-plugins.org/ .
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2006-2007 Nagios Plugin Development Team
+Copyright (C) 2006-2015 Nagios Plugin Development Team
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.

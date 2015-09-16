@@ -1,4 +1,4 @@
-package Nagios::Plugin::Threshold;
+package Nagios::Monitoring::Plugin::Threshold;
 
 use 5.006;
 
@@ -8,9 +8,9 @@ use warnings;
 use base qw(Class::Accessor::Fast);
 __PACKAGE__->mk_accessors(qw(warning critical));
 
-use Nagios::Plugin::Range;
-use Nagios::Plugin::Functions qw(:codes nagios_die);
-our ($VERSION) = $Nagios::Plugin::Functions::VERSION;
+use Nagios::Monitoring::Plugin::Range;
+use Nagios::Monitoring::Plugin::Functions qw(:codes nagios_die);
+our ($VERSION) = $Nagios::Monitoring::Plugin::Functions::VERSION;
 
 sub get_status 
 {
@@ -35,20 +35,20 @@ sub _inflate
     my ($self, $value, $key) = @_;
 
     # Return an undefined range if $value is undef
-    return Nagios::Plugin::Range->new if ! defined $value;
+    return Nagios::Monitoring::Plugin::Range->new if ! defined $value;
 
     # For refs, check isa N::P::Range
     if (ref $value) {
         nagios_die("Invalid $key object: type " . ref $value)
-            unless $value->isa("Nagios::Plugin::Range");
+            unless $value->isa("Nagios::Monitoring::Plugin::Range");
         return $value;
     }
 
     # Another quick exit if $value is an empty string
-    return Nagios::Plugin::Range->new if $value eq "";
+    return Nagios::Monitoring::Plugin::Range->new if $value eq "";
 
     # Otherwise parse $value
-    my $range = Nagios::Plugin::Range->parse_range_string($value);
+    my $range = Nagios::Monitoring::Plugin::Range->parse_range_string($value);
     nagios_die("Cannot parse $key range: '$value'") unless(defined($range));
     return $range;
 }
@@ -86,15 +86,15 @@ __END__
 
 =head1 NAME
 
-Nagios::Plugin::Threshold - class for handling Nagios::Plugin thresholds.
+Nagios::Monitoring::Plugin::Threshold - class for handling Nagios::Monitoring::Plugin thresholds.
 
 =head1 SYNOPSIS
 
-    # NB: This is an internal Nagios::Plugin class.
-    # See Nagios::Plugin itself for public interfaces.
+    # NB: This is an internal Nagios::Monitoring::Plugin class.
+    # See Nagios::Monitoring::Plugin itself for public interfaces.
   
     # Constructor
-    $t = Nagios::Plugin::Threshold->set_thresholds(
+    $t = Nagios::Monitoring::Plugin::Threshold->set_thresholds(
         warning  => $warning_range_string,
         critical => $critical_range_string,
     );
@@ -110,8 +110,8 @@ Nagios::Plugin::Threshold - class for handling Nagios::Plugin thresholds.
 
 =head1 DESCRIPTION
 
-Internal Nagios::Plugin class for handling threshold data. See 
-Nagios::Plugin for public interfaces.
+Internal Nagios::Monitoring::Plugin class for handling threshold data. See 
+Nagios::Monitoring::Plugin for public interfaces.
 
 A threshold object contains (typically) a pair of ranges, associated 
 with a particular severity e.g.
@@ -122,11 +122,11 @@ with a particular severity e.g.
 =head1 AUTHOR
 
 This code is maintained by the Nagios Plugin Development Team: see
-http://nagiosplug.sourceforge.net.
+https://nagios-plugins.org/ .
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2006-2007 Nagios Plugin Development Team
+Copyright (C) 2006-2015 Nagios Plugin Development Team
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.

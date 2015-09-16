@@ -1,9 +1,9 @@
 #
-# Nagios::Plugin::Getopt - OO perl module providing standardised argument 
+# Nagios::Monitoring::Plugin::Getopt - OO perl module providing standardised argument 
 #   processing for nagios plugins
 #
 
-package Nagios::Plugin::Getopt;
+package Nagios::Monitoring::Plugin::Getopt;
 
 use strict;
 use File::Basename;
@@ -12,10 +12,10 @@ use Carp;
 use Params::Validate qw(:all);
 use base qw(Class::Accessor);
 
-use Nagios::Plugin::Functions;
-use Nagios::Plugin::Config;
+use Nagios::Monitoring::Plugin::Functions;
+use Nagios::Monitoring::Plugin::Config;
 use vars qw($VERSION);
-$VERSION = $Nagios::Plugin::Functions::VERSION;
+$VERSION = $Nagios::Monitoring::Plugin::Functions::VERSION;
 
 # Standard defaults
 my %DEFAULT = (
@@ -38,7 +38,7 @@ my @ARGS = ({
     help => "-V, --version\n   Print version information",
   }, {
     spec => 'extra-opts:s@',
-    help => "--extra-opts=[section][\@file]\n   Read options from an ini file. See http://nagiosplugins.org/extra-opts\n   for usage and examples.",
+    help => "--extra-opts=[section][\@file]\n   Read options from an ini file. See https://nagios-plugins.org/doc/extra-opts.html\n   for usage and examples.",
   }, {
     spec => 'timeout|t=i',
     help => "-t, --timeout=INTEGER\n   Seconds before plugin times out (default: %s)",
@@ -60,7 +60,7 @@ sub _die
   my $self = shift;
   my ($msg) = @_;
   $msg .= "\n" unless substr($msg, -1) eq "\n";
-  Nagios::Plugin::Functions::_nagios_exit(3, $msg);
+  Nagios::Monitoring::Plugin::Functions::_nagios_exit(3, $msg);
 }
 
 # Return the given attribute, if set, including a final newline
@@ -243,7 +243,7 @@ sub _load_config_section
   $section ||= $self->{_attr}->{plugin};
 
   my $Config;
-  eval { $Config = Nagios::Plugin::Config->read($file); };
+  eval { $Config = Nagios::Monitoring::Plugin::Config->read($file); };
   $self->_die($@) if ($@); #TODO: add test?
 
   # TODO: is this check sane? Does --extra-opts=foo require a [foo] section?
@@ -485,16 +485,16 @@ __END__
 
 =head1 NAME
 
-Nagios::Plugin::Getopt - OO perl module providing standardised argument 
+Nagios::Monitoring::Plugin::Getopt - OO perl module providing standardised argument 
 processing for Nagios plugins
 
 
 =head1 SYNOPSIS
 
-  use Nagios::Plugin::Getopt;
+  use Nagios::Monitoring::Plugin::Getopt;
 
   # Instantiate object (usage is mandatory)
-  $ng = Nagios::Plugin::Getopt->new(
+  $ng = Nagios::Monitoring::Plugin::Getopt->new(
     usage => "Usage: %s -H <host> -w <warning> -c <critical>",
     version => '0.1',
     url => 'http://www.openfusion.com.au/labs/nagios/',
@@ -528,7 +528,7 @@ processing for Nagios plugins
 
 =head1 DESCRIPTION
 
-Nagios::Plugin::Getopt is an OO perl module providing standardised and 
+Nagios::Monitoring::Plugin::Getopt is an OO perl module providing standardised and 
 simplified argument processing for Nagios plugins. It implements 
 a number of standard arguments itself (--help, --version, 
 --usage, --timeout, --verbose, and their short form counterparts), 
@@ -539,12 +539,12 @@ additional arguments to be easily defined.
 =head2 CONSTRUCTOR
 
   # Instantiate object (usage is mandatory)
-  $ng = Nagios::Plugin::Getopt->new(
+  $ng = Nagios::Monitoring::Plugin::Getopt->new(
     usage => 'Usage: %s --hello',
     version => '0.01',
   );
 
-The Nagios::Plugin::Getopt constructor accepts the following named 
+The Nagios::Monitoring::Plugin::Getopt constructor accepts the following named 
 arguments:
 
 =over 4
@@ -790,7 +790,7 @@ if none is explicitly supplied.
 =item required
 
 The C<required> argument is a boolean used to indicate that this argument 
-is mandatory (Nagios::Plugin::Getopt will exit with your usage message and 
+is mandatory (Nagios::Monitoring::Plugin::Getopt will exit with your usage message and 
 a 'Missing argument' indicator if any required arguments are not supplied).
 
 =back
@@ -848,7 +848,7 @@ to override if you want to use a custom timeout message).
 
 =head1 SEE ALSO
 
-Nagios::Plugin, Getopt::Long
+Nagios::Monitoring::Plugin, Getopt::Long
 
 
 =head1 AUTHOR
@@ -858,7 +858,7 @@ Gavin Carr <gavin@openfusion.com.au>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2006-2007 by the Nagios Plugin Development Team.
+Copyright (C) 2006-2015 by the Nagios Plugin Development Team.
 
 This module is free software. It may be used, redistributed
 and/or modified under either the terms of the Perl Artistic 

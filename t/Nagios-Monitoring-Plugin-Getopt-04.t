@@ -1,12 +1,12 @@
-# Nagios::Plugin::Getopt spec-to-help generation tests
+# Nagios::Monitoring::Plugin::Getopt spec-to-help generation tests
 
 use strict;
 
 use Test::More tests => 11;
-BEGIN { use_ok('Nagios::Plugin::Getopt') };
+BEGIN { use_ok('Nagios::Monitoring::Plugin::Getopt') };
 
 # Needed to get evals to work in testing
-Nagios::Plugin::Functions::_use_die(1);
+Nagios::Monitoring::Plugin::Functions::_use_die(1);
 
 my %PARAM = (
     version => '0.01',
@@ -16,7 +16,7 @@ my %PARAM = (
 sub setup 
 {
   # Instantiate object
-  my $ng = Nagios::Plugin::Getopt->new(%PARAM);
+  my $ng = Nagios::Monitoring::Plugin::Getopt->new(%PARAM);
   ok($ng, 'constructor ok');
 
   # Positional args, no short arguments, INTEGER

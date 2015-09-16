@@ -1,4 +1,7 @@
-Revision history for Perl module Nagios::Plugin.
+Revision history for Perl module Nagios::Monitoring::Plugin.
+
+0.50 22nd September 2015
+  - Rename package to Nagios::Monitoring::Plugin
 
 0.36 22nd December 2011
   - Updated check_threshold to allow multiple check values to be checked at once
@@ -25,7 +28,7 @@ Revision history for Perl module Nagios::Plugin.
   - Fixed performance parsing when numeric fields had commas instead of periods due to locale settings
   - If a performance set is not parseable, instead of returning an empty array, will return all the successfully
     parsed sets
-  - Fixed test plan for Nagios-Plugin-Performance.t
+  - Fixed test plan for Nagios-Monitoring-Plugin-Performance.t
 
 0.29 2nd December 2008
   - clean_label, for cleaning up a label for RRD, but without truncation
@@ -38,7 +41,7 @@ Revision history for Perl module Nagios::Plugin.
   - Fixed parsing of performance data with scientific notation
 
 0.26 28th March 2008
-  - Fixed test failure in t/Nagios-Plugin-Getopt-03.t (Thomas Guyot-Sionnest)
+  - Fixed test failure in t/Nagios-Monitoring-Plugin-Getopt-03.t (Thomas Guyot-Sionnest)
 
 0.25  17th March 2008
   - Fixed parsing of performance data with negative values and full range definitions
@@ -67,7 +70,7 @@ Revision history for Perl module Nagios::Plugin.
   - Fix error when parsing performance data where warn or crit are 0
   - Optional _use_die flag to force nagios_die to call die instead of exit, so
     exceptions can be caught with an eval
-  - Convenience function to set use_die so you can run 'use Nagios::Plugin::Performance use_die => 1'
+  - Convenience function to set use_die so you can run 'use Nagios::Monitoring::Plugin::Performance use_die => 1'
 
 0.17  23rd March 2007
   - bump version number again due to cpan indexing stupidity (Gavin)
@@ -82,7 +85,7 @@ Revision history for Perl module Nagios::Plugin.
   - added max_state function in N::P::Functions (Ton)
 
 0.15  19th December 2006
-  - exposed Getopt and Threshold functionality from top level Nagios::Plugin
+  - exposed Getopt and Threshold functionality from top level Nagios::Monitoring::Plugin
   - exchanged Class::Struct for Class::Accessor
 
 0.14  18th October 2006
@@ -90,7 +93,7 @@ Revision history for Perl module Nagios::Plugin.
 
 0.13  18th October 2006
   - Lots of extra tests and fixes from Nathan Vonnahme
-  - Nagios::Plugin::Getopt, Functions and ExitResult added by Gavin Carr
+  - Nagios::Monitoring::Plugin::Getopt, Functions and ExitResult added by Gavin Carr
 
 0.12  15th June 2006
   - rrdlabel method available to get a performance label, 
@@ -109,5 +112,5 @@ Revision history for Perl module Nagios::Plugin.
 
 0.01  Fri Jun  2 14:10:58 2006
 	- original version; created by h2xs 1.23 with options
-		-X -n Nagios::Plugin
+		-X -n Nagios::Monitoring::Plugin
 

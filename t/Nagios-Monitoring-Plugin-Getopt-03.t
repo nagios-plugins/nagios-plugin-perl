@@ -1,4 +1,4 @@
-# Nagios::Plugin::Getopt --extra-opts tests
+# Nagios::Monitoring::Plugin::Getopt --extra-opts tests
 
 use strict;
 use File::Spec;
@@ -6,10 +6,10 @@ use File::Basename;
 use IO::File;
 
 use Test::More qw(no_plan);
-BEGIN { use_ok('Nagios::Plugin::Getopt') };
+BEGIN { use_ok('Nagios::Monitoring::Plugin::Getopt') };
 
 # Needed to get evals to work in testing
-Nagios::Plugin::Functions::_use_die(1);
+Nagios::Monitoring::Plugin::Functions::_use_die(1);
 
 my $tdir = 'npg03';
 if (! -d $tdir) {
@@ -45,7 +45,7 @@ sub ng_setup
   my $arg = shift;
 
   # Instantiate object
-  my $ng = Nagios::Plugin::Getopt->new(%PARAM);
+  my $ng = Nagios::Monitoring::Plugin::Getopt->new(%PARAM);
 
   if (ref $arg eq 'ARRAY' && @$arg) {
     $ng->arg(%$_) foreach @$arg;
@@ -54,7 +54,7 @@ sub ng_setup
   return $ng;
 }
 
-# Setup our Nagios::Plugin::Getopt object
+# Setup our Nagios::Monitoring::Plugin::Getopt object
 my $ng;
 my $arg = [
   { spec => 'S',            help => '-S' },
