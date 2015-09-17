@@ -6,6 +6,7 @@ WriteMakefile(
     NAME              => 'Nagios::Monitoring::Plugin',
     VERSION_FROM      => 'lib/Nagios/Monitoring/Plugin/Functions.pm', # finds $VERSION
     PREREQ_PM         => {
+        'LICENSE'  => 'perl',
         Params::Validate    => 0,
         Class::Accessor     => 0,
         Test::More 	        => 0.62,
@@ -19,4 +20,5 @@ WriteMakefile(
     ($] >= 5.005 ?     ## Add these new keywords supported since 5.005
       (ABSTRACT_FROM  => 'lib/Nagios/Monitoring/Plugin.pm', # retrieve abstract from module
        AUTHOR         => 'Nagios Plugin Development Team <nagiosplug-devel@lists.sourceforge.net>') : ()),
+    ($ExtUtils::MakeMaker::VERSION >= 6.3002 ? ('LICENSE'  => 'perl_5', ) : ()),
 );
