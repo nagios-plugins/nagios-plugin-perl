@@ -1,6 +1,9 @@
 Revision history for Perl module Nagios::Monitoring::Plugin.
 
-0.50 22nd September 2015
+0.51 17th September 2015
+  - Remove usage of defined %hash in test for perl 5.21.x and later
+
+0.50 16th September 2015
   - Rename package to Nagios::Monitoring::Plugin
 
 0.36 22nd December 2011

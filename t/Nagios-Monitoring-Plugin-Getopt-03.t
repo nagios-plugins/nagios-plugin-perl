@@ -97,7 +97,9 @@ for my $infile (glob File::Spec->catfile($tdir, 'input', $glob)) {
       if ($@) {
         chomp $@;
         ok($infile =~ m/_(dies?|catch)$/, "$infile ($@)");
-        is($@, $EXPECTED{$infile}, $infile) if ($infile =~ m/_catch$/);
+        my $expectedini = $EXPECTED{$infile};
+        $expectedini =~ s~/~\\~gmx if $^O =~ m/^MSWin/;
+        is($@, $expectedini, $infile) if ($infile =~ m/_catch$/);
       }
       else { 
         is($plugin . ' ' . $ng->_cmdline, $EXPECTED{$infile}, $infile);
