@@ -1,15 +1,16 @@
 Nagios::Monitoring::Plugin
-==============
+==========================
 
-These modules are meant for perl developers of plugins for Nagios 
-(https://github.com/nagios-plugins/nagios-plugin-perl). It is meant to simplify a lot 
-of the common functions required to do checking of a particular 
-service.
+* These modules are meant for perl developers of [Nagios plugins](https://github.com/nagios-plugins/nagios-plugin-perl).
 
-The modules are still in an experimental stage and will be considered 
-stable when it reaches version 1.0.
+* It is meant to simplify a lot of the common functions required to do checking of a particular service.
 
-INSTALLATION
+* **The modules are still in an experimental stage and will be considered 
+stable when it reaches version 1.0.**
+
+
+Installation Instructions
+-------------------------
 
 To install this module type the following:
 
@@ -19,17 +20,19 @@ To install this module type the following:
    make install
 
 
-EXAMPLE SCRIPT
+Example Usage
+-------------
 
-"Enough talk!  Show me where to start!"
+> Enough talk!  Show me where to start!
 
-See the file 'check_stuff.pl' in the 't' directory for a complete 
+See the file `check_stuff.pl` in the `t/` directory for a complete 
 working example of a plugin script.
 
 
-COPYRIGHT AND LICENCE
+License Notice
+--------------
 
-Copyright (C) 2006-2015 by Nagios Plugin Development Team
+Copyright (C) 2006-2017 by Nagios Plugin Development Team
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself, either Perl version 5.8.4 or,
