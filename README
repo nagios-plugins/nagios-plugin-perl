@@ -1,11 +1,12 @@
 Nagios::Monitoring::Plugin
-==============
+==========================
 
-These modules are meant for [perl developers of plugins for Nagios](https://github.com/nagios-plugins/nagios-plugin-perl). 
-It is meant to simplify a lot of the common functions required to do checking of a particular service.
+* These modules are meant for perl developers of [Nagios plugins](https://github.com/nagios-plugins/nagios-plugin-perl).
 
-The modules are still in an experimental stage and will be considered 
-stable when it reaches version 1.0.
+* It is meant to simplify a lot of the common functions required to do checking of a particular service.
+
+* **The modules are still in an experimental stage and will be considered 
+stable when it reaches version 1.0.**
 
 Installing
 ----------
@@ -21,13 +22,12 @@ To install this module type the following:
     make test
     make install
 
-
 Example
 -------
 
-"Enough talk!  Show me where to start!"
+> Enough talk!  Show me where to start!
 
-See the file 'check_stuff.pl' in the 't' directory for a complete 
+See the file `check_stuff.pl` in the `t/` directory for a complete 
 working example of a plugin script.
 
 
