@@ -16,7 +16,11 @@
 use strict;
 use warnings;
 
-use Nagios::Monitoring::Plugin ;
+use File::Basename qw(dirname);
+use Cwd  qw(abs_path);
+use lib dirname(dirname abs_path $0) . '/lib';
+
+use Nagios::Monitoring::Plugin;
 
 use vars qw($VERSION $PROGNAME  $verbose $warn $critical $timeout $result);
 $VERSION = '1.0';

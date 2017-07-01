@@ -15,9 +15,22 @@ stable when it reaches version 1.0.**
 Installing
 ----------
 
-You may need some prerequisites first. If you're on RHEL/Cent, it would be:
+You may need some prerequisites first. If you're on CentOS/RHEL, make sure to 
+install CPAN and use those packages, since yum no longer supports some 
+required packages.   
+For CentOS 6/7:
 
-    yum install -y perl-devel perl-Class-Accessor perl-Config-Tiny perl-Math-Calc-Units
+    yum install -y perl-devel cpan make
+    cpan Test::More
+    cpan Params::Validate Math::Calc::Units Class::Accessor::Fast Config::Tiny
+
+For Debian 7+/Ubuntu 14.04+:
+
+    apt-get install make libperl-dev libparams-validate-perl libmath-calc-units-perl libclass-accessor-perl libconfig-tiny-perl
+
+For Fedora 25+:
+
+    dnf install -y make perl-devel 'perl(Params::Validate)' 'perl(Math::Calc::Units)' 'perl(Class::Accessor::Fast)' 'perl(Config::Tiny)' 'perl(Test::More)'
 
 To install this module type the following:
 
@@ -43,5 +56,3 @@ Copyright (C) 2006-2017 by Nagios Plugin Development Team
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself, either Perl version 5.8.4 or,
 at your option, any later version of Perl 5 you may have available.
-
-
